@@ -9,78 +9,89 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-      - name: Install Dependencies
-        run: npm install
+    - name: Checkout
+      uses: actions/checkout@v2
 
-  unit_test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-      - name: Install Chrome
-        run: |
-          sudo apt-get update
-          sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome*.deb
-          export CHROME_BIN=/usr/bin/google-chrome
-      - name: Run Unit Tests
-        run: npm run test -- --no-watch --browsers=ChromeHeadlessCI
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+          node-version: '16'
 
-  build_app:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-      - name: Install Angular CLI
-        run: npm install @angular/cli
-      - name: Build Application
-        run: npm run build:prod
-      - name: Archive Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist
+    - name: Install dependencies
+      run: npm install
 
-  deploy_prod:
-    runs-on: ubuntu-latest
-    needs: build_app
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - name: Deploy to S3
-        run: aws s3 sync dist s3://$AWS_S3_DEPLOY --delete
+    - name: Run tests
+      run: npm run test:headless
 
-  invalidate:
-    runs-on: ubuntu-latest
-    needs: deploy_prod
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - name: Create CloudFront Invalidation
-        run: aws cloudfront create-invalidation --distribution-id $AWS_DISTRIBUTION_ID --paths "/*"
+    - name: Build
+      run: npm run build:prod
 
-  test_deploy:
-    runs-on: ubuntu-latest
-    needs: invalidate
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Check Deployed Content
-        run: curl $APP_BASE_URL | grep $GREP_CONTENT_TEST
+
+  # unit_test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: "16"
+  #     - name: Install Chrome
+  #       run: |
+  #         sudo apt-get update
+  #         sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  #         sudo apt install -y ./google-chrome*.deb
+  #         export CHROME_BIN=/usr/bin/google-chrome
+  #     - name: Run Unit Tests
+  #       run: npm run test -- --no-watch --browsers=ChromeHeadlessCI
+
+  # build_app:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: "16"
+  #     - name: Install Angular CLI
+  #       run: npm install @angular/cli
+  #     - name: Build Application
+  #       run: npm run build:prod
+  #     - name: Archive Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: dist
+  #         path: dist
+
+  # deploy_prod:
+  #   runs-on: ubuntu-latest
+  #   needs: build_app
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: AWS CLI
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
+  #     - name: Deploy to S3
+  #       run: aws s3 sync dist s3://$AWS_S3_DEPLOY --delete
+
+  # invalidate:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy_prod
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: AWS CLI
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
+  #     - name: Create CloudFront Invalidation
+  #       run: aws cloudfront create-invalidation --distribution-id $AWS_DISTRIBUTION_ID --paths "/*"
+
+  # test_deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: invalidate
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: Check Deployed Content
+  #       run: curl $APP_BASE_URL | grep $GREP_CONTENT_TEST
