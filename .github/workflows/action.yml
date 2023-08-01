@@ -20,9 +20,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build
-      run: npm run build:prod
-
     - name: Cache node modules
       id: cache-nodemodules
       uses: actions/cache@v2
@@ -36,6 +33,9 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
           ${{ runner.os }}-
+
+    - name: Build
+      run: npm run build:prod
 
     - name: Run tests
       run: npm run test -- --no-watch --browsers=ChromeHeadlessCI
