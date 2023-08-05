@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
     - name: Setup AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -24,11 +25,25 @@ jobs:
       with:
           node-version: '18'
 
+    - name: Cache node_modules
+      id: cache-node_modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node_modules
+      with:
+        # caching node_modules
+        path: node_modules # path for node_modules folder
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
     - name: Install dependencies
       run: npm install
 
-    # - name: Run tests
-    #   run: npm run test:headless
+    - name: Tests
+      run: npm run test -- --prod
 
     - name: Build
       run: npm run build:prod
