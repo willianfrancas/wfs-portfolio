@@ -54,7 +54,7 @@ jobs:
 
     - name: Invalidation
       if: success()
-      run: aws cloudfront create-invalidation --distribution-id $AWS_DISTRIBUTION_ID
+      run: aws cloudfront create-invalidation --distribution-id $AWS_DISTRIBUTION_ID --paths "/*"
 
     # invalidate:
   #   runs-on: ubuntu-latest
