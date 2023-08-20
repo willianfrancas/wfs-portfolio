@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build:prod": "ng build",
+    "build:prod": "ng build --prod",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:action": "ng test --browsers=ChormeHeadless --watch=false --code-coverage"
   },
   "private": true,
   "dependencies": {
