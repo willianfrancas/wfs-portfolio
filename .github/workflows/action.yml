@@ -58,4 +58,4 @@ jobs:
 
     - name: Check Deployed Content
       if: success()
-      run: curl $APP_BASE_URL | grep $GREP_CONTENT_TEST
+      run: curl ${{secrets.APP_BASE_URL}} | grep ${{secrets.GREP_CONTENT_TEST}}
