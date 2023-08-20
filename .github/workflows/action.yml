@@ -8,9 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ng-toolkit
 
     steps:
     - name: Setup AWS Credentials
