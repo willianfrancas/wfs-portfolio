@@ -33,6 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - uses: actions/checkout@v2
       - uses: cypress-io/github-action@v2
         with:
           start: npm start
@@ -40,14 +41,14 @@ jobs:
           browser: chrome
           headless: true
 
-      - uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: cy-screenshots
-          path: cy-screenshots
+      # - uses: actions/upload-artifact@v1
+      #   if: failure()
+      #   with:
+      #     name: cypress-screenshots
+      #     path: cypress-screenshots
 
-      - uses: actions/upload-artifact@v1
-        if: always()
-        with:
-          name: cy-videos
-          path: cy-videos
+      # - uses: actions/upload-artifact@v1
+      #   if: always()
+      #   with:
+      #     name: cypress-videos
+      #     path: cypress-videos
