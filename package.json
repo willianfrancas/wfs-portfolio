@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cypress:server": "concurrently \"npm run start\" \"npm run cypress:open\"",
+    "cypress:server": "concurrently \"npm run start\" \"npm run cypress:run\"",
     "test:action": "ng test --browsers=ChromeHeadless --watch=false --code-coverage"
   },
   "private": true,
