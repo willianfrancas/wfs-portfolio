@@ -37,7 +37,7 @@ jobs:
       - uses: cypress-io/github-action@v2
         with:
           start: npm run cypress:server
-          wait-on: "http://localhost:4200"
+          wait-on: "http://[::1]:4200"
           browser: chrome
           headless: true
 
