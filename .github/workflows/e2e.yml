@@ -12,6 +12,7 @@ jobs:
           browser: chrome
           headless: true
 
+      - uses: actions/checkout@v2
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
