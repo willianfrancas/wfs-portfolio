@@ -15,11 +15,11 @@ jobs:
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
-            name: cypress-screenshots
-            path: cypress-screenshots
+          name: cy-screenshots
+          path: cy-screenshots
 
-      - uses: action/upload-artifact@v1
+      - uses: actions/upload-artifact@v1
         if: always()
         with:
-          name: cypress-videos
-          path: cypress-videos
+          name: cy-videos
+          path: cy-videos
