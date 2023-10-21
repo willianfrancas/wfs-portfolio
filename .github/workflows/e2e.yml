@@ -1,0 +1,25 @@
+name: E2E test Chrome Headless
+on: [push]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+          wait-on: "http://localhost:4200"
+          browser: chrome
+          headless: true
+
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+            name: cypress-screenshots
+            path: cypress-screenshots
+
+      - uses: action/upload-artifact@v1
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress-videos
