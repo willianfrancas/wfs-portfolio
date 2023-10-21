@@ -30,16 +30,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - uses: actions/checkout@v2
-      - uses: cypress-io/github-action@v2
+      - uses: actions/checkout@v4
+      - uses: cypress-io/github-action@v6
         with:
           start: npm run cypress:server
           wait-on: "http://[::1]:4200"
           browser: chrome
-          headless: true
+          headed: true
 
       - uses: actions/upload-artifact@v1
         if: failure()
