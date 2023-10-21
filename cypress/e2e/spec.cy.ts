@@ -1,5 +1,5 @@
 beforeEach(() => {
-  cy.visit('http://localhost:4200/')
+  cy.visit(Cypress.env('local'));
 });
 
 describe('Website is On', () => {

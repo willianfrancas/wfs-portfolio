@@ -1,21 +1,25 @@
-import { defineConfig } from 'cypress'
+import { defineConfig } from "cypress";
 
 export default defineConfig({
-
-  e2e: {
-    'baseUrl': 'http://localhost:4200'
-  },
-
-
   component: {
     devServer: {
-      framework: 'angular',
-      bundler: 'webpack',
+      framework: "angular",
+      bundler: "webpack",
     },
-    specPattern: '**/*.cy.ts'
+    specPattern: "**/*.cy.ts",
   },
 
-  viewportHeight: 720,
-  viewportWidth: 1440,
+  e2e: {
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
+    },
+  },
 
-})
+  env: {
+    local: 'http://localhost:4200',
+    _prod: 'https://willianfrancas.com.br',
+  },
+
+  viewportHeight: 858,
+  viewportWidth: 1440
+});
