@@ -10,7 +10,7 @@ describe('Website is On', () => {
 
 describe('Count elements', () => {
   it('should contain 6 items on menu', () => {
-    const itemsArray = ['Home', 'About', 'Skills', 'License & Certified', 'Resume', 'Contact'];
+    const itemsArray = ['Inicio', 'Sobre', 'Habilidades', 'Certficados', 'Resumo', 'Contato'];
     cy.get('#navbar ul li a i~span').then(content => {
       cy.wrap(content).should('have.length', 6);
       for (let i = 0; i < content.length; i++) {
